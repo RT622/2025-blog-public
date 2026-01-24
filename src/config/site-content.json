@@ -1,26 +1,21 @@
 {
 	"meta": {
-		"title": "贰狗の疯狗日志",
-		"description": "任贰狗的个人博客，东拼西凑收集来的一些软件、游戏、杂七杂八乱折腾的笔记教程。",
+		"title": "YYsuni",
+		"description": "YYsuni 的个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
 		"username": "Ciao"
 	},
 	"theme": {
-		"colorBrand": "#de4331",
-		"colorPrimary": "#4E3F42",
-		"colorSecondary": "#7b888e",
-		"colorBrandSecondary": "#FCC841",
-		"colorBg": "#eeeeee",
-		"colorBorder": "#ffffff",
-		"colorCard": "#ffffff66",
-		"colorArticle": "#ffffffcc"
+		"colorBrand": "#2a48f3",
+		"colorPrimary": "#e6e8e8",
+		"colorSecondary": "#acadae",
+		"colorBrandSecondary": "#51d0b9",
+		"colorBg": "#0a051f",
+		"colorBorder": "#8a8a8a5e",
+		"colorCard": "#ffffff0e",
+		"colorArticle": "#6f6f6f33"
 	},
 	"backgroundColors": [
-		"#FCC841",
-		"#DFEFFC",
-		"#DEDE92",
-		"#DE4331",
-		"#FE9750",
-		"#FCC841"
+		"#16007b"
 	],
 	"artImages": [
 		{
@@ -44,21 +39,21 @@
 		{
 			"id": "github",
 			"type": "github",
-			"value": "https://github.com/RT622",
+			"value": "https://github.com/yysuni",
 			"label": "Github",
 			"order": 3
 		},
 		{
 			"id": "juejin",
-			"type": "qq",
-			"value": "/images/social-buttons/7f509f0a4c020a31.png",
+			"type": "juejin",
+			"value": "https://juejin.cn/user/2427311675422382",
 			"label": "稀土掘金",
 			"order": 2
 		},
 		{
 			"id": "email",
 			"type": "email",
-			"value": "Twodog@88.com",
+			"value": "yysuni1001@gmail.com",
 			"label": "",
 			"order": 1
 		}
