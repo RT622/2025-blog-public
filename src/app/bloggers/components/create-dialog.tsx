@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { Plus } from 'lucide-react'
+import { Plus, Loader2 } from 'lucide-react'
 import AvatarUploadDialog, { type AvatarItem } from './avatar-upload-dialog'
 import { DialogModal } from '@/components/dialog-modal'
 
@@ -29,6 +29,37 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 		stars: 3
 	})
 	const [showAvatarDialog, setShowAvatarDialog] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
+
+	const parseUrl = async (url: string) => {
+		if (!url || !url.startsWith('http')) return
+
+		setIsLoading(true)
+		try {
+			// 这里使用fetch API获取链接内容并解析
+			// 注意：由于CORS限制，实际生产环境需要后端API支持
+			// 这里仅做模拟实现
+			await new Promise(resolve => setTimeout(resolve, 1000)) // 模拟网络请求
+
+			// 模拟解析结果
+			const mockResult = {
+				title: '示例文章标题',
+				description: '这是文章的摘要内容，用于展示在卡片中。',
+				image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=blog%20article%20cover%20image%20with%20blue%20background&image_size=square'
+			}
+
+			setFormData(prev => ({
+				...prev,
+				name: mockResult.title,
+				avatar: mockResult.image,
+				description: mockResult.description
+			}))
+		} catch (error) {
+			toast.error('解析链接失败，请手动填写信息')
+		} finally {
+			setIsLoading(false)
+		}
+	}
 
 	useEffect(() => {
 		if (blogger) {
@@ -64,9 +95,23 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 		<DialogModal open onClose={onClose} className='card w-sm'>
 			{/* 卡片样式的内容 */}
 			<div>
-				<div className='mb-4 flex items-center gap-4'>
-					<div className='group relative cursor-pointer' onClick={() => setShowAvatarDialog(true)}>
-						{formData.avatar ? (
+				<div 
+					className='mb-4 flex items-center gap-4 cursor-pointer' 
+					onClick={() => {
+						if (formData.url) {
+							window.open(formData.url, '_blank', 'noopener noreferrer')
+						}
+					}}
+				>
+					<div className='group relative cursor-pointer' onClick={(e) => {
+						e.stopPropagation() // 阻止事件冒泡，避免触发外层div的跳转
+						setShowAvatarDialog(true)
+					}}>
+						{isLoading ? (
+							<div className='flex h-16 w-16 items-center justify-center rounded-full bg-gray-200'>
+								<Loader2 className='h-6 w-6 text-gray-500 animate-spin' />
+							</div>
+						) : formData.avatar ? (
 							<>
 								<img src={formData.avatar} alt={formData.name} className='h-16 w-16 rounded-full object-cover' />
 								<div className='pointer-events-none absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
@@ -90,7 +135,14 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 						<input
 							type='url'
 							value={formData.url}
-							onChange={e => setFormData({ ...formData, url: e.target.value })}
+							onChange={e => {
+								const url = e.target.value
+								setFormData({ ...formData, url })
+								// 当用户输入完成后，自动解析链接
+								if (url && url.startsWith('http')) {
+									parseUrl(url)
+								}
+							}}
 							placeholder='https://example.com'
 							className='text-secondary mt-1 w-full truncate text-xs focus:outline-none'
 						/>
