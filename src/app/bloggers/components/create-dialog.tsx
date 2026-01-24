@@ -36,23 +36,43 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 
 		setIsLoading(true)
 		try {
-			// 使用免费的链接预览API来解析文章信息
-			// 注意：实际生产环境可能需要后端API支持，或使用付费的链接预览服务
-			const apiUrl = `https://api.linkpreview.net/?key=22405104943f6e07471f72a28b8c99d4&q=${encodeURIComponent(url)}`
+			// 尝试使用更可靠的API
+			// 注意：实际生产环境建议使用后端API或配置CORS代理
+			const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
 			const response = await fetch(apiUrl)
-			const data = await response.json()
+			const html = await response.text()
 
-			if (data.title) {
+			// 解析HTML获取标题
+			const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)
+			const title = titleMatch ? titleMatch[1].trim() : ''
+
+			// 解析HTML获取描述
+			const descMatch = html.match(/<meta name="description" content="([\s\S]*?)"[^>]*>/i)
+			const description = descMatch ? descMatch[1].trim() : ''
+
+			// 解析HTML获取图片
+			const imgMatch = html.match(/<meta property="og:image" content="([\s\S]*?)"[^>]*>/i)
+			let image = imgMatch ? imgMatch[1].trim() : ''
+
+			// 如果没有og:image，尝试其他图片源
+			if (!image) {
+				const twitterImgMatch = html.match(/<meta name="twitter:image" content="([\s\S]*?)"[^>]*>/i)
+				image = twitterImgMatch ? twitterImgMatch[1].trim() : ''
+			}
+
+			if (title) {
 				setFormData(prev => ({
 					...prev,
-					name: data.title || '',
-					avatar: data.image || '',
-					description: data.description || ''
+					name: title || '',
+					avatar: image || '',
+					description: description || ''
 				}))
+				toast.success('链接解析成功')
 			} else {
-				throw new Error('解析失败')
+				throw new Error('解析失败，未找到标题')
 			}
 		} catch (error) {
+			console.error('解析错误:', error)
 			toast.error('解析链接失败，请手动填写信息')
 		} finally {
 			setIsLoading(false)
