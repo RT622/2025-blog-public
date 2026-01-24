@@ -57,7 +57,7 @@ export default function Page() {
 										/>
 									</div>
 								)}
-								<div className='flex-1 flex flex-col'>
+								<div className='flex-1 flex flex-col pt-[15px]'>
 									<h2 className='text-sm font-bold mb-1 transition-colors hover:text-brand line-clamp-1'>
 										{article.title}
 									</h2>
