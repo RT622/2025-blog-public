@@ -36,24 +36,22 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 
 		setIsLoading(true)
 		try {
-			// 这里使用fetch API获取链接内容并解析
-			// 注意：由于CORS限制，实际生产环境需要后端API支持
-			// 这里仅做模拟实现
-			await new Promise(resolve => setTimeout(resolve, 1000)) // 模拟网络请求
+			// 使用免费的链接预览API来解析文章信息
+			// 注意：实际生产环境可能需要后端API支持，或使用付费的链接预览服务
+			const apiUrl = `https://api.linkpreview.net/?key=22405104943f6e07471f72a28b8c99d4&q=${encodeURIComponent(url)}`
+			const response = await fetch(apiUrl)
+			const data = await response.json()
 
-			// 模拟解析结果
-			const mockResult = {
-				title: '示例文章标题',
-				description: '这是文章的摘要内容，用于展示在卡片中。',
-				image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=blog%20article%20cover%20image%20with%20blue%20background&image_size=square'
+			if (data.title) {
+				setFormData(prev => ({
+					...prev,
+					name: data.title || '',
+					avatar: data.image || '',
+					description: data.description || ''
+				}))
+			} else {
+				throw new Error('解析失败')
 			}
-
-			setFormData(prev => ({
-				...prev,
-				name: mockResult.title,
-				avatar: mockResult.image,
-				description: mockResult.description
-			}))
 		} catch (error) {
 			toast.error('解析链接失败，请手动填写信息')
 		} finally {
