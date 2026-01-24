@@ -36,31 +36,44 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 
 		setIsLoading(true)
 		try {
-			// 尝试使用更可靠的API
-			// 注意：实际生产环境建议使用后端API或配置CORS代理
-			const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-			const response = await fetch(apiUrl)
+			// 使用更可靠的CORS代理
+			const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`
+			const response = await fetch(proxyUrl, {
+				headers: {
+					'Content-Type': 'text/html'
+				}
+			})
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`)
+			}
+			
 			const html = await response.text()
+			console.log('HTML获取成功，长度:', html.length)
 
 			// 优先使用Open Graph协议标签获取文章信息
 			// 解析HTML获取文章标题
 			const ogTitleMatch = html.match(/<meta property="og:title" content="([\s\S]*?)"[^>]*>/i)
 			const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)
 			const title = ogTitleMatch ? ogTitleMatch[1].trim() : (titleMatch ? titleMatch[1].trim() : '')
+			console.log('解析到的标题:', title)
 
 			// 解析HTML获取文章摘要
 			const ogDescMatch = html.match(/<meta property="og:description" content="([\s\S]*?)"[^>]*>/i)
 			const descMatch = html.match(/<meta name="description" content="([\s\S]*?)"[^>]*>/i)
 			const description = ogDescMatch ? ogDescMatch[1].trim() : (descMatch ? descMatch[1].trim() : '')
+			console.log('解析到的描述:', description)
 
 			// 解析HTML获取文章封面
 			const imgMatch = html.match(/<meta property="og:image" content="([\s\S]*?)"[^>]*>/i)
 			let image = imgMatch ? imgMatch[1].trim() : ''
+			console.log('解析到的图片:', image)
 
 			// 如果没有og:image，尝试其他图片源
 			if (!image) {
 				const twitterImgMatch = html.match(/<meta name="twitter:image" content="([\s\S]*?)"[^>]*>/i)
 				image = twitterImgMatch ? twitterImgMatch[1].trim() : ''
+				console.log('解析到的Twitter图片:', image)
 			}
 
 			// 如果仍然没有图片，尝试从文章内容中提取第一张图片
@@ -74,6 +87,7 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 						imgSrc = `${urlObj.protocol}//${urlObj.host}${imgSrc}`
 					}
 					image = imgSrc
+					console.log('解析到的内容图片:', image)
 				}
 			}
 
