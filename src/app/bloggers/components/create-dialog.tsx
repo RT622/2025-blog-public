@@ -42,15 +42,18 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 			const response = await fetch(apiUrl)
 			const html = await response.text()
 
-			// 解析HTML获取标题
+			// 优先使用Open Graph协议标签获取文章信息
+			// 解析HTML获取文章标题
+			const ogTitleMatch = html.match(/<meta property="og:title" content="([\s\S]*?)"[^>]*>/i)
 			const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)
-			const title = titleMatch ? titleMatch[1].trim() : ''
+			const title = ogTitleMatch ? ogTitleMatch[1].trim() : (titleMatch ? titleMatch[1].trim() : '')
 
-			// 解析HTML获取描述
+			// 解析HTML获取文章摘要
+			const ogDescMatch = html.match(/<meta property="og:description" content="([\s\S]*?)"[^>]*>/i)
 			const descMatch = html.match(/<meta name="description" content="([\s\S]*?)"[^>]*>/i)
-			const description = descMatch ? descMatch[1].trim() : ''
+			const description = ogDescMatch ? ogDescMatch[1].trim() : (descMatch ? descMatch[1].trim() : '')
 
-			// 解析HTML获取图片
+			// 解析HTML获取文章封面
 			const imgMatch = html.match(/<meta property="og:image" content="([\s\S]*?)"[^>]*>/i)
 			let image = imgMatch ? imgMatch[1].trim() : ''
 
@@ -58,6 +61,20 @@ export default function CreateDialog({ blogger, onClose, onSave }: CreateDialogP
 			if (!image) {
 				const twitterImgMatch = html.match(/<meta name="twitter:image" content="([\s\S]*?)"[^>]*>/i)
 				image = twitterImgMatch ? twitterImgMatch[1].trim() : ''
+			}
+
+			// 如果仍然没有图片，尝试从文章内容中提取第一张图片
+			if (!image) {
+				const contentImgMatch = html.match(/<img[^>]*src="([\s\S]*?)"[^>]*>/i)
+				if (contentImgMatch) {
+					let imgSrc = contentImgMatch[1].trim()
+					// 如果是相对路径，转换为绝对路径
+					if (imgSrc.startsWith('/') && !imgSrc.startsWith('//')) {
+						const urlObj = new URL(url)
+						imgSrc = `${urlObj.protocol}//${urlObj.host}${imgSrc}`
+					}
+					image = imgSrc
+				}
 			}
 
 			if (title) {
