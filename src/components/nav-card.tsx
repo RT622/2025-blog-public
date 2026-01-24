@@ -29,25 +29,25 @@ const list = [
 		icon: WebsiteOutlineSVG,
 		iconActive: WebsiteFilledSVG,
 		label: '宝藏软件',
-		href: '/bloggers'
+		href: '/Soft'
 	},
 	{
 		icon: ProjectsOutlineSVG,
 		iconActive: ProjectsFilledSVG,
 		label: '精品游戏',
-		href: '/projects'
+		href: '/Games'
 	},
 	{
 		icon: AboutOutlineSVG,
 		iconActive: AboutFilledSVG,
 		label: '人物卡片',
-		href: '/about'
+		href: '/Chara'
 	},
 	{
 		icon: ShareOutlineSVG,
 		iconActive: ShareFilledSVG,
 		label: '折腾笔记',
-		href: '/share'
+		href: '/Notes'
 	},
 	{
 		icon: ScrollOutlineSVG,
