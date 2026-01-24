@@ -1,7 +1,7 @@
 {
 	"meta": {
-		"title": "YYsuni",
-		"description": "YYsuni 的个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
+		"title": "贰狗の疯狗日志",
+		"description": "任贰狗的个人博客，东拼西凑收集来的一些软件、游戏、杂七杂八乱折腾的笔记教程。",
 		"username": "Ciao"
 	},
 	"theme": {
@@ -44,21 +44,21 @@
 		{
 			"id": "github",
 			"type": "github",
-			"value": "https://github.com/yysuni",
+			"value": "https://github.com/RT622",
 			"label": "Github",
 			"order": 3
 		},
 		{
 			"id": "juejin",
-			"type": "juejin",
-			"value": "https://juejin.cn/user/2427311675422382",
+			"type": "qq",
+			"value": "/images/social-buttons/7f509f0a4c020a31.png",
 			"label": "稀土掘金",
 			"order": 2
 		},
 		{
 			"id": "email",
 			"type": "email",
-			"value": "yysuni1001@gmail.com",
+			"value": "Twodog@88.com",
 			"label": "",
 			"order": 1
 		}
