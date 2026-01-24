@@ -26,35 +26,36 @@ import { HomeDraggableLayer } from '@/app/(home)/home-draggable-layer'
 
 const list = [
 	{
-		icon: ScrollOutlineSVG,
-		iconActive: ScrollFilledSVG,
-		label: '近期文章',
-		href: '/blog'
+		icon: WebsiteOutlineSVG,
+		iconActive: WebsiteFilledSVG,
+		label: '宝藏软件',
+		href: '/bloggers'
 	},
 	{
 		icon: ProjectsOutlineSVG,
 		iconActive: ProjectsFilledSVG,
-		label: '我的项目',
+		label: '精品游戏',
 		href: '/projects'
 	},
 	{
 		icon: AboutOutlineSVG,
 		iconActive: AboutFilledSVG,
-		label: '关于网站',
+		label: '人物卡片',
 		href: '/about'
 	},
 	{
 		icon: ShareOutlineSVG,
 		iconActive: ShareFilledSVG,
-		label: '推荐分享',
+		label: '折腾笔记',
 		href: '/share'
 	},
 	{
-		icon: WebsiteOutlineSVG,
-		iconActive: WebsiteFilledSVG,
-		label: '优秀博客',
-		href: '/bloggers'
+		icon: ScrollOutlineSVG,
+		iconActive: ScrollFilledSVG,
+		label: '文章归档',
+		href: '/blog'
 	}
+
 ]
 
 const extraSize = 8
